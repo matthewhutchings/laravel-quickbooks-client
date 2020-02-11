@@ -1,19 +1,15 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <title>{{ config('app.name') }} - QuickBooks Authorization</title>
-</head>
-<body>
+@extends('spark::layouts.app')
+@section('content')
 <div class="container">
-    <h1 class="page-heading">QuickBooks Authorization</h1>
 
-    {{-- TODO: Text here to explain what is going on --}}
-    {{-- TODO: Work on UI --}}
-    <a href="{!! $authorization_uri !!}">Connect to QuickBooks</a>
+    <div class="card">
+        <div class="card-header">
+            <h1 class="page-heading">QuickBooks Set Up</h1>
+        </div>
+
+        <div class="card-body">
+            <a href="{!! $authorization_uri !!}"><img src="{{ asset('/images/C2QB_white_btn_lg_default.png') }}" class="img-fluid" width="250px" alt="ProcureHQ Logo"></a>
+        </div>
+    </div>
 </div>
-</body>
-</html>
+@endsection
