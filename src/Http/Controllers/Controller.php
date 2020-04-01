@@ -85,10 +85,7 @@ class Controller extends LaravelController
         // TODO: Deal with exceptions
         $quickbooks->exchangeCodeForToken($request->get('code'), $request->get('realmId'));
 
-        // TODO: Figure out where to put this in session & remove Facade
-        Alert::success('Connected to QuickBooks')
-             ->flash();
+        return redirect('/accounting/quickbooksconnected');
 
-        return $redirector->intended($url_generator->route('quickbooks.connect'));
-    }
+        // return $redirector->intended($url_generator->route('quickbooks.connect'));    }
 }
