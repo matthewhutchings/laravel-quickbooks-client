@@ -36,13 +36,13 @@ class Controller extends LaravelController
         // Give view to remove token if user already linked account
         if ($quickbooks->hasValidRefreshToken()) {
             return $view_factory->make('quickbooks::disconnect')
-                                ->with('company', $quickbooks->getDataService()
-                                                             ->getCompanyInfo());
+                ->with('company', $quickbooks->getDataService()
+                    ->getCompanyInfo());
         }
 
         // Give view to link account
         return $view_factory->make('quickbooks::connect')
-                            ->with('authorization_uri', $quickbooks->authorizationUri());
+            ->with('authorization_uri', $quickbooks->authorizationUri());
     }
 
     /**
@@ -60,7 +60,7 @@ class Controller extends LaravelController
 
         // TODO: Figure out where to put this in session & remove Facade
         Alert::success('Disconnected from QuickBooks')
-             ->flash();
+            ->flash();
 
         return $redirector->back();
     }
@@ -87,5 +87,6 @@ class Controller extends LaravelController
 
         return redirect('/accounting/quickbooksconnected');
 
-        // return $redirector->intended($url_generator->route('quickbooks.connect'));    }
+        // return $redirector->intended($url_generator->route('quickbooks.connect'));
+    }
 }
