@@ -110,7 +110,7 @@ class Client
         // Have good access & refresh, so allow app to run
         if ($this->hasValidAccessToken()) {
             // Pull in the configs from the token into needed keys from the configs
-            return DataService::Configure(
+            $data_service = DataService::Configure(
                 array_merge(
                     array_intersect_key($this->parseDataConfigs(), $existing_keys),
                     [
@@ -135,7 +135,7 @@ class Client
         );
 
         $revoke_token = $data_service->getOAuth2LoginHelper()
-            ->revokeToken();
+            ->revokeToken($this->token->access_token);
 
 
         $this->setToken($this->token->remove());
