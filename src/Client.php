@@ -107,6 +107,7 @@ class Client
             'ClientSecret' => null,
         ];
 
+<<<<<<< HEAD
         try {
 
             // Have good access & refresh, so allow app to run
@@ -125,16 +126,25 @@ class Client
             }
 
 
+=======
+        // Have good access & refresh, so allow app to run
+        if ($this->hasValidAccessToken()) {
+>>>>>>> 63ce3196bc5f56f4e47172891649c6a62d4b5680
             // Pull in the configs from the token into needed keys from the configs
             $data_service = DataService::Configure(
                 array_merge(
                     array_intersect_key($this->parseDataConfigs(), $existing_keys),
                     [
+<<<<<<< HEAD
+=======
+                        'accessTokenKey'  => $this->token->access_token,
+>>>>>>> 63ce3196bc5f56f4e47172891649c6a62d4b5680
                         'QBORealmID'      => $this->token->realm_id,
                         'refreshTokenKey' => $this->token->refresh_token,
                     ]
                 )
             );
+<<<<<<< HEAD
 
             $revoke_token = $data_service->getOAuth2LoginHelper()
                 ->revokeToken($this->token->access_token);
@@ -142,6 +152,26 @@ class Client
             //throw $th;
         }
 
+=======
+        }
+
+
+        // Pull in the configs from the token into needed keys from the configs
+        $data_service = DataService::Configure(
+            array_merge(
+                array_intersect_key($this->parseDataConfigs(), $existing_keys),
+                [
+                    'QBORealmID'      => $this->token->realm_id,
+                    'refreshTokenKey' => $this->token->refresh_token,
+                ]
+            )
+        );
+
+        $revoke_token = $data_service->getOAuth2LoginHelper()
+            ->revokeToken($this->token->access_token);
+
+
+>>>>>>> 63ce3196bc5f56f4e47172891649c6a62d4b5680
         $this->setToken($this->token->remove());
 
 
