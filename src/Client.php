@@ -66,8 +66,8 @@ class Client
     public function authorizationUri()
     {
         return $this->getDataService()
-                    ->getOAuth2LoginHelper()
-                    ->getAuthorizationCodeURL();
+            ->getOAuth2LoginHelper()
+            ->getAuthorizationCodeURL();
     }
 
     /**
@@ -98,6 +98,46 @@ class Client
      */
     public function deleteToken()
     {
+
+        // Associative array to use to filter out only the needed config keys when using existing token
+        $existing_keys = [
+            'auth_mode'    => null,
+            'baseUrl'      => null,
+            'ClientID'     => null,
+            'ClientSecret' => null,
+        ];
+
+        // Have good access & refresh, so allow app to run
+        if ($this->hasValidAccessToken()) {
+            // Pull in the configs from the token into needed keys from the configs
+            return DataService::Configure(
+                array_merge(
+                    array_intersect_key($this->parseDataConfigs(), $existing_keys),
+                    [
+                        'accessTokenKey'  => $this->token->access_token,
+                        'QBORealmID'      => $this->token->realm_id,
+                        'refreshTokenKey' => $this->token->refresh_token,
+                    ]
+                )
+            );
+        }
+
+
+        // Pull in the configs from the token into needed keys from the configs
+        $data_service = DataService::Configure(
+            array_merge(
+                array_intersect_key($this->parseDataConfigs(), $existing_keys),
+                [
+                    'QBORealmID'      => $this->token->realm_id,
+                    'refreshTokenKey' => $this->token->refresh_token,
+                ]
+            )
+        );
+
+        $revoke_token = $data_service->getOAuth2LoginHelper()
+            ->revokeToken();
+
+
         $this->setToken($this->token->remove());
 
         return $this;
@@ -119,14 +159,14 @@ class Client
     public function exchangeCodeForToken($code, $realm_id)
     {
         $oauth_token = $this->getDataService()
-                            ->getOAuth2LoginHelper()
-                            ->exchangeAuthorizationCodeForToken($code, $realm_id);
+            ->getOAuth2LoginHelper()
+            ->exchangeAuthorizationCodeForToken($code, $realm_id);
 
         $this->getDataService()
-             ->updateOAuth2Token($oauth_token);
+            ->updateOAuth2Token($oauth_token);
 
         $this->token->parseOauthToken($oauth_token)
-                    ->save();
+            ->save();
 
         return $this;
     }
@@ -165,7 +205,7 @@ class Client
         if (!$this->hasValidAccessToken() || !isset($this->report_service)) {
             $this->report_service = new ReportService(
                 $this->getDataService()
-                     ->getServiceContext()
+                    ->getServiceContext()
             );
         }
 
@@ -244,12 +284,12 @@ class Client
             );
 
             $oauth_token = $data_service->getOAuth2LoginHelper()
-                                        ->refreshToken();
+                ->refreshToken();
 
             $data_service->updateOAuth2Token($oauth_token);
 
             $this->token->parseOauthToken($oauth_token)
-                        ->save();
+                ->save();
 
             return $data_service;
         }
